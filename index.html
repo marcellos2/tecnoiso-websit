@@ -29,25 +29,15 @@
     <div class="grid-bg"></div>
 
     <header>
-        <div class="logo">
+       <div class="logo">
             <a href="index.html" class="logo-text">Tecnoiso</a>
             <div class="logo-glow"></div>
         </div>
         <nav>
             <ul>
-                <li class="nav-item">
-                    <a href="index.html">
-                        <span>Home</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="produtos/produtos.html">
-                        <span>Produtos</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <span>Contato</span>
-                </li>
+                <li class="nav-item"><a href="index.html"><span>Home</span></a></li>
+                <li class="nav-item"><a href="produtos/produtos.html"><span>Produtos</span></a></li>
+                <li class="nav-item"><span>Contato</span></li>
                 <li class="cart-icon">
                     <div class="cart-wrapper" id="cartButton">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#fff" viewBox="0 0 16 16">
@@ -232,30 +222,5 @@
     </main>
 
     <script src="script.js"></script>
-    
-    <!-- Script de debug para navegação -->
-    <script>
-        console.log('🔍 Debug de navegação carregado');
-        console.log('Página atual:', window.location.pathname);
-        console.log('Host:', window.location.host);
-        console.log('Origin:', window.location.origin);
-        
-        // Verificar se arquivos existem
-        document.addEventListener('DOMContentLoaded', function() {
-            // Verificar se script.js carregou
-            setTimeout(() => {
-                const scripts = document.querySelectorAll('script[src="script.js"]');
-                console.log('Scripts encontrados:', scripts.length);
-                
-                // Testar navegação para produtos
-                const produtoLink = document.querySelector('.nav-item:nth-child(2) a');
-                if (produtoLink) {
-                    console.log('Link produtos encontrado:', produtoLink.href);
-                } else {
-                    console.error('❌ Link produtos não encontrado!');
-                }
-            }, 100);
-        });
-    </script>
 </body>
 </html>

@@ -12,6 +12,16 @@ document.addEventListener('DOMContentLoaded', function() {
     let timer;
     let isTransitioning = false;
 
+    // Verificar se GSAP está carregado
+    function checkGSAP() {
+        if (typeof gsap === 'undefined') {
+            console.error('❌ GSAP não está carregado! Verifique se o script está incluído no HTML.');
+            return false;
+        }
+        console.log('✅ GSAP carregado com sucesso!');
+        return true;
+    }
+
     // Função para verificar se estamos na página index.html
     function isIndexPage() {
         return window.location.pathname.endsWith('index.html') || 
@@ -23,18 +33,15 @@ document.addEventListener('DOMContentLoaded', function() {
     function navigateToProducts() {
         console.log('Navegando para produtos...');
         
-        // Verificar caminhos possíveis
         const possiblePaths = [
             'produtos/produtos.html',
             './produtos/produtos.html',
             '/produtos/produtos.html'
         ];
         
-        // Se estivermos na pasta raiz, usar o primeiro caminho
         if (isIndexPage()) {
             window.location.href = possiblePaths[0];
         } else {
-            // Tentar navegar relativamente
             window.location.href = possiblePaths[1];
         }
     }
@@ -47,25 +54,18 @@ document.addEventListener('DOMContentLoaded', function() {
             const link = navItem.querySelector('a');
             const span = navItem.querySelector('span');
             
-            // Remover event listeners existentes
-            navItem.removeEventListener('click', handleNavClick);
-            if (link) link.removeEventListener('click', handleLinkClick);
-            
-            // Adicionar novos event listeners
             if (index === 1) { // Item "Produtos"
+                const clickHandler = function(e) {
+                    e.preventDefault();
+                    navigateToProducts();
+                };
+                
                 if (link) {
-                    link.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        navigateToProducts();
-                    });
+                    link.addEventListener('click', clickHandler);
                 } else if (span) {
-                    navItem.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        navigateToProducts();
-                    });
+                    navItem.addEventListener('click', clickHandler);
                 }
                 
-                // Adicionar cursor pointer
                 navItem.style.cursor = 'pointer';
                 
             } else if (index === 0) { // Item "Home"
@@ -87,9 +87,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Funções de animação GSAP
+    // Funções de animação GSAP - Com fallback se GSAP não estiver disponível
     function animateSlideTransition(currentItem, nextItem, direction) {
         return new Promise((resolve) => {
+            if (!checkGSAP()) {
+                // Fallback sem GSAP
+                currentItem.style.opacity = '0';
+                resolve();
+                return;
+            }
+
             gsap.to(currentItem, {
                 duration: 0.8,
                 opacity: 0,
@@ -102,6 +109,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function animateNewSlide(nextItem, direction) {
+        if (!checkGSAP()) {
+            // Fallback sem GSAP
+            nextItem.style.opacity = '1';
+            nextItem.style.transform = 'translateX(0) rotateY(0)';
+            return;
+        }
+
         gsap.fromTo(nextItem, 
             { opacity: 0, x: direction > 0 ? 100 : -100, rotationY: direction > 0 ? 30 : -30 },
             {
@@ -115,15 +129,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function animateSlideElements(item) {
+        if (!checkGSAP()) return;
+
         const words = item.querySelectorAll('.word');
         const description = item.querySelector('.description');
         const priceContainer = item.querySelector('.price-container');
         const img = item.querySelector('.product-img img');
         
+        // Reset inicial
         gsap.set(words, { y: 100, rotationX: 90, opacity: 0 });
         gsap.set([description, priceContainer], { y: 30, opacity: 0 });
         gsap.set(img, { x: 300, rotationY: 45, opacity: 0 });
         
+        // Animações
         gsap.to(words, {
             y: 0,
             rotationX: 0,
@@ -143,7 +161,9 @@ document.addEventListener('DOMContentLoaded', function() {
             delay: 0.5
         });
         
-        if (item.querySelector('.more-info.show')) {
+        // Animar descrição se estiver visível
+        const moreInfo = item.querySelector('.more-info');
+        if (moreInfo && moreInfo.classList.contains('show')) {
             gsap.to([description, priceContainer], {
                 y: 0,
                 opacity: 1,
@@ -155,32 +175,61 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     async function update(direction) {
-        if (isTransitioning) return;
+        if (isTransitioning || total === 0) return;
+        
+        console.log(`🔄 Atualizando slide: direção ${direction}, ativo atual: ${active}`);
+        
         isTransitioning = true;
 
         const currentItem = document.querySelector(".item.active");
         const currentDot = document.querySelector(".dot.active");
+        
+        if (!currentItem || !currentDot) {
+            console.error('❌ Item ou dot ativo não encontrado!');
+            isTransitioning = false;
+            return;
+        }
+
         const next = (active + direction + total) % total;
         const nextItem = items[next];
         const nextDot = dots[next];
 
+        if (!nextItem || !nextDot) {
+            console.error('❌ Próximo item ou dot não encontrado!');
+            isTransitioning = false;
+            return;
+        }
+
+        // Executar transição
         await animateSlideTransition(currentItem, nextItem, direction);
         
+        // Atualizar classes
         currentItem.classList.remove("active");
         currentDot.classList.remove("active");
         
         nextItem.classList.add("active");
         nextDot.classList.add("active");
         
+        // Animar novo slide
         animateNewSlide(nextItem, direction);
         animateSlideElements(nextItem);
 
         active = next;
         updateNumberWithEffect(active + 1);
         isTransitioning = false;
+        
+        console.log(`✅ Slide atualizado para: ${active + 1}`);
     }
 
     function updateNumberWithEffect(num) {
+        if (!numbersIndicator) return;
+
+        if (!checkGSAP()) {
+            // Fallback sem GSAP
+            numbersIndicator.textContent = String(num).padStart(2, "0");
+            return;
+        }
+
         gsap.to(numbersIndicator, {
             duration: 0.3,
             y: -10,
@@ -201,18 +250,35 @@ document.addEventListener('DOMContentLoaded', function() {
     function startTimer() {
         clearInterval(timer);
         
-        timer = setInterval(() => {
-            update(1);
-        }, 5000);
+        // Só iniciar timer se tivermos slides válidos
+        if (total > 1) {
+            timer = setInterval(() => {
+                update(1);
+            }, 5000);
+            console.log('⏰ Timer iniciado (5s)');
+        }
     }
 
     function setupButtonInteractions() {
         infoButtons.forEach(button => {
             button.addEventListener('click', function(e) {
                 e.preventDefault();
+                console.log('🔘 Botão info clicado');
+                
                 const moreInfo = this.parentElement.querySelector('.more-info');
+                if (!moreInfo) return;
+
                 const isShowing = moreInfo.classList.toggle('show');
-                this.querySelector('.btn-text').textContent = isShowing ? 'Mostrar menos' : 'Saiba mais';
+                const btnText = this.querySelector('.btn-text');
+                if (btnText) {
+                    btnText.textContent = isShowing ? 'Mostrar menos' : 'Saiba mais';
+                }
+                
+                if (!checkGSAP()) {
+                    // Fallback sem GSAP
+                    moreInfo.style.display = isShowing ? 'block' : 'none';
+                    return;
+                }
                 
                 if (isShowing) {
                     gsap.to(moreInfo, {
@@ -220,7 +286,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         duration: 0.8,
                         ease: "power2.inOut"
                     });
-                    gsap.to([moreInfo.querySelector('.description'), moreInfo.querySelector('.price-container')], {
+                    
+                    const description = moreInfo.querySelector('.description');
+                    const priceContainer = moreInfo.querySelector('.price-container');
+                    
+                    gsap.to([description, priceContainer], {
                         y: 0,
                         opacity: 1,
                         duration: 0.6,
@@ -232,8 +302,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         duration: 0.8,
                         ease: "power2.inOut",
                         onComplete: () => {
-                            gsap.set([moreInfo.querySelector('.description'), moreInfo.querySelector('.price-container')], 
-                            { y: 30, opacity: 0 });
+                            const description = moreInfo.querySelector('.description');
+                            const priceContainer = moreInfo.querySelector('.price-container');
+                            gsap.set([description, priceContainer], { y: 30, opacity: 0 });
                         }
                     });
                 }
@@ -243,14 +314,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function setupArrowInteractions() {
         if (prevButton) {
-            prevButton.addEventListener('click', function() {
+            prevButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('⬅️ Botão anterior clicado');
                 update(-1);
                 startTimer();
             });
         }
 
         if (nextButton) {
-            nextButton.addEventListener('click', function() {
+            nextButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('➡️ Botão próximo clicado');
                 update(1);
                 startTimer();
             });
@@ -259,7 +334,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function setupDotInteractions() {
         dots.forEach((dot, index) => {
-            dot.addEventListener("click", () => {
+            dot.addEventListener("click", (e) => {
+                e.preventDefault();
+                console.log(`🔘 Dot ${index + 1} clicado`);
+                
                 if (index !== active) {
                     update(index - active);
                     startTimer();
@@ -269,25 +347,38 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function setupHeaderEffects() {
+        if (!header) return;
+
         let lastScrollY = window.scrollY;
         
         window.addEventListener('scroll', () => {
             const currentScrollY = window.scrollY;
             
-            if (currentScrollY > lastScrollY && currentScrollY > 100) {
-                gsap.to(header, {
-                    y: -100,
-                    opacity: 0.8,
-                    duration: 0.3,
-                    ease: "power2.out"
-                });
+            if (!checkGSAP()) {
+                // Fallback sem GSAP
+                if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                    header.style.transform = 'translateY(-100px)';
+                    header.style.opacity = '0.8';
+                } else {
+                    header.style.transform = 'translateY(0)';
+                    header.style.opacity = '1';
+                }
             } else {
-                gsap.to(header, {
-                    y: 0,
-                    opacity: 1,
-                    duration: 0.3,
-                    ease: "power2.out"
-                });
+                if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                    gsap.to(header, {
+                        y: -100,
+                        opacity: 0.8,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                } else {
+                    gsap.to(header, {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.3,
+                        ease: "power2.out"
+                    });
+                }
             }
             
             lastScrollY = currentScrollY;
@@ -297,16 +388,17 @@ document.addEventListener('DOMContentLoaded', function() {
     function setupKeyboardNavigation() {
         document.addEventListener('keydown', e => {
             if (e.key === 'ArrowLeft') {
+                console.log('⌨️ Seta esquerda pressionada');
                 update(-1);
                 startTimer();
             } else if (e.key === 'ArrowRight') {
+                console.log('⌨️ Seta direita pressionada');
                 update(1);
                 startTimer();
             }
         });
     }
 
-    // Configurar carrinho
     function setupCart() {
         const cartButton = document.getElementById('cartButton');
         const cartCount = document.getElementById('cartCount');
@@ -316,63 +408,94 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.preventDefault();
                 alert('Carrinho de compras disponível na página de produtos!\n\nClique em "Produtos" para ver nosso catálogo completo.');
                 
-                // Opcional: redirecionar para produtos
                 setTimeout(() => {
                     navigateToProducts();
                 }, 1000);
             });
             
-            // Definir contador inicial
             cartCount.textContent = '0';
         }
     }
 
-    // Função de debug
-    function debugNavigation() {
-        console.log('🔍 Debug da navegação:');
-        console.log('- Página atual:', window.location.pathname);
+    function debugInfo() {
+        console.log('🔍 Debug do Slider:');
+        console.log('- Total de items:', total);
+        console.log('- Items encontrados:', items.length);
+        console.log('- Dots encontrados:', dots.length);
+        console.log('- Botões info encontrados:', infoButtons.length);
+        console.log('- Item ativo atual:', active);
         console.log('- É página index?', isIndexPage());
+        console.log('- GSAP disponível?', typeof gsap !== 'undefined');
         
-        const navItems = document.querySelectorAll('.nav-item');
-        console.log('- Items de navegação encontrados:', navItems.length);
+        // Verificar se elementos necessários existem
+        if (items.length === 0) console.warn('⚠️ Nenhum item .item encontrado!');
+        if (dots.length === 0) console.warn('⚠️ Nenhum dot .dot encontrado!');
+        if (!prevButton) console.warn('⚠️ Botão #prev não encontrado!');
+        if (!nextButton) console.warn('⚠️ Botão #next não encontrado!');
+        if (!numbersIndicator) console.warn('⚠️ Indicador .numbers não encontrado!');
+    }
+
+    function initializeSlider() {
+        // Garantir que o primeiro item está ativo
+        if (items.length > 0) {
+            items.forEach(item => item.classList.remove('active'));
+            items[0].classList.add('active');
+        }
         
-        navItems.forEach((item, index) => {
-            const link = item.querySelector('a');
-            const span = item.querySelector('span');
-            console.log(`  Item ${index}: link=${!!link}, span=${!!span}`);
-            if (link) console.log(`    Link href: ${link.getAttribute('href')}`);
-            if (span) console.log(`    Span text: ${span.textContent}`);
-        });
+        if (dots.length > 0) {
+            dots.forEach(dot => dot.classList.remove('active'));
+            dots[0].classList.add('active');
+        }
+        
+        // Animar primeiro slide
+        if (items[0]) {
+            animateSlideElements(items[0]);
+        }
+        
+        // Atualizar contador
+        updateNumberWithEffect(1);
     }
 
     function init() {
+        console.log('🚀 Inicializando Tecnoiso Enhanced...');
+        
         // Debug inicial
-        debugNavigation();
+        debugInfo();
         
-        // Animação inicial
-        gsap.from('header', {
-            y: -50,
-            opacity: 0,
-            duration: 0.8,
-            ease: "back.out(1.7)"
-        });
+        // Verificar GSAP
+        checkGSAP();
         
-        gsap.from('.nav-item', {
-            y: -20,
-            opacity: 0,
-            stagger: 0.1,
-            duration: 0.6,
-            delay: 0.3,
-            ease: "back.out(1.7)"
-        });
+        // Inicializar slider se estivermos na página index
+        if (isIndexPage() && total > 0) {
+            initializeSlider();
+        }
         
-        gsap.from('.cart-icon', {
-            scale: 0,
-            rotation: 180,
-            duration: 0.8,
-            delay: 0.5,
-            ease: "elastic.out(1, 0.5)"
-        });
+        // Animações iniciais do header
+        if (checkGSAP()) {
+            gsap.from('header', {
+                y: -50,
+                opacity: 0,
+                duration: 0.8,
+                ease: "back.out(1.7)"
+            });
+            
+            gsap.from('.nav-item', {
+                y: -20,
+                opacity: 0,
+                stagger: 0.1,
+                duration: 0.6,
+                delay: 0.3,
+                ease: "back.out(1.7)"
+            });
+            
+            gsap.from('.cart-icon', {
+                scale: 0,
+                rotation: 180,
+                duration: 0.8,
+                delay: 0.5,
+                ease: "elastic.out(1, 0.5)"
+            });
+        }
 
         // Configurar todas as interações
         setupNavigation();
@@ -386,10 +509,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Iniciar timer se estivermos na página index
         if (isIndexPage()) {
             startTimer();
-            updateNumberWithEffect(1);
         }
         
-        console.log('🚀 Tecnoiso Enhanced - Navegação corrigida!');
+        console.log('✅ Tecnoiso Enhanced inicializado com sucesso!');
     }
 
     // Inicializar tudo
@@ -412,7 +534,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function createMatrixRain() {
         console.log("🎮 Konami code activated!");
         
-        // Criar efeito Matrix
         const matrixContainer = document.createElement('div');
         matrixContainer.style.cssText = `
             position: fixed;
@@ -440,7 +561,6 @@ document.addEventListener('DOMContentLoaded', function() {
             matrixContainer.appendChild(drop);
         }
         
-        // Adicionar CSS para animação
         const matrixStyle = document.createElement('style');
         matrixStyle.textContent = `
             @keyframes matrix-fall {
@@ -451,7 +571,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.head.appendChild(matrixStyle);
         document.body.appendChild(matrixContainer);
         
-        // Remover após 3 segundos
         setTimeout(() => {
             matrixContainer.remove();
             matrixStyle.remove();

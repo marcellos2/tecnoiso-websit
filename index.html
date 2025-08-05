@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tecnoiso - Ferramentas Profissionais</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <!-- GSAP para animações -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollToPlugin.min.js"></script>
+</head>
+<body>
+    <!-- Particle background -->
+    <div class="particles-container">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- Animated grid background -->
+    <div class="grid-bg"></div>
+
+    <header>
+        <div class="logo">
+            <a href="index.html" class="logo-text">Tecnoiso</a>
+            <div class="logo-glow"></div>
+        </div>
+        <nav>
+            <ul>
+                <li class="nav-item">
+                    <a href="index.html">
+                        <span>Home</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="produtos/produtos.html">
+                        <span>Produtos</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <span>Contato</span>
+                </li>
+                <li class="cart-icon">
+                    <div class="cart-wrapper" id="cartButton">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#fff" viewBox="0 0 16 16">
+                            <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                        </svg>
+                        <span class="cart-count" id="cartCount">0</span>
+                        <div class="cart-ripple"></div>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="tech-circle">
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+        </div>
+
+        <!-- Energy waves -->
+        <div class="energy-waves">
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+        </div>
+
+        <div class="list">
+            <div class="item active">
+                <div class="product-img">
+                    <div class="img-glow"></div>
+                    <img src="img/ali.png" alt="Alicate Amperímetro">
+                    <div class="floating-elements">
+                        <div class="float-element"></div>
+                        <div class="float-element"></div>
+                        <div class="float-element"></div>
+                    </div>
+                </div>
+                <div class="content">
+                    <p class="product-tag">
+                        <span class="tag-bg"></span>
+                        <span class="tag-text">Novo lançamento</span>
+                    </p>
+                    <h1 class="product-name">
+                        <span class="word">Alicate</span>
+                        <span class="word">Amperímetro</span>
+                    </h1>
+                    <div class="more-info">
+                        <p class="description">
+                            Tela retroiluminada. Tensão máxima da corrente alternada: 600V.
+                            Resistência máxima de 4000Ω. Faixa de medição de corrente: 0A-400A AC.
+                            Precisão: ±2,5%. Função de retenção de dados. Auto power off.
+                        </p>
+                        <div class="price-container">
+                            <span class="currency">R$</span>
+                            <span class="price">249,90</span>
+                        </div>
+                    </div>
+                    <button class="btn">
+                        <span class="btn-text">Saiba mais</span>
+                        <div class="btn-bg"></div>
+                        <div class="btn-ripple"></div>
+                    </button>
+                </div>
+            </div>
+
+            <div class="item">
+                <div class="product-img">
+                    <div class="img-glow"></div>
+                    <img src="img/paq.png" alt="Paquímetro Universal">
+                    <div class="floating-elements">
+                        <div class="float-element"></div>
+                        <div class="float-element"></div>
+                        <div class="float-element"></div>
+                    </div>
+                </div>
+                <div class="content">
+                    <p class="product-tag">
+                        <span class="tag-bg"></span>
+                        <span class="tag-text">Novo lançamento</span>
+                    </p>
+                    <h1 class="product-name">
+                        <span class="word">Paquímetro</span>
+                        <span class="word">Universal</span>
+                        <span class="word">150MM</span>
+                    </h1>
+                    <div class="more-info">
+                        <p class="description">
+                            Ideal para realizar medições de qualidade e precisão, este
+                            Paquímetro Universal é indicado para trabalhos de medição em
+                            geral, em diversos locais de trabalho. Muito preciso e prático,
+                            esta ferramenta é de fácil manuseio e apresenta visualização
+                            mais clara e precisa dos números medidos. Graduação: 0,02mm.
+                            Capacidade: 150mm (6"). Material: aço inoxidável.
+                        </p>
+                        <div class="price-container">
+                            <span class="currency">R$</span>
+                            <span class="price">129,90</span>
+                        </div>
+                    </div>
+                    <button class="btn">
+                        <span class="btn-text">Saiba mais</span>
+                        <div class="btn-bg"></div>
+                        <div class="btn-ripple"></div>
+                    </button>
+                </div>
+            </div>
+
+            <div class="item">
+                <div class="product-img">
+                    <div class="img-glow"></div>
+                    <img src="img/term.png" alt="Termo Higrômetro">
+                    <div class="floating-elements">
+                        <div class="float-element"></div>
+                        <div class="float-element"></div>
+                        <div class="float-element"></div>
+                    </div>
+                </div>
+                <div class="content">
+                    <p class="product-tag">
+                        <span class="tag-bg"></span>
+                        <span class="tag-text">Novo lançamento</span>
+                    </p>
+                    <h1 class="product-name">
+                        <span class="word">Termo</span>
+                        <span class="word">Higrômetro</span>
+                        <span class="word">Digital</span>
+                    </h1>
+                    <div class="more-info">
+                        <p class="description">
+                            O Termo Higrômetro Medidor Sensor Temperatura Umidade Relógio é
+                            a solução ideal para quem busca monitorar as condições
+                            climáticas de maneira prática e precisa. Com um design moderno
+                            na cor branca e um diâmetro de 20 cm, ele se integra facilmente
+                            a qualquer ambiente. Faixa de medição: Temperatura: -10°C a 50°C.
+                            Umidade: 10% a 99% RH. Precisão: ±1°C e ±5% RH.
+                        </p>
+                        <div class="price-container">
+                            <span class="currency">R$</span>
+                            <span class="price">89,90</span>
+                        </div>
+                    </div>
+                    <button class="btn">
+                        <span class="btn-text">Saiba mais</span>
+                        <div class="btn-bg"></div>
+                        <div class="btn-ripple"></div>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="arrows">
+            <button class="arrow-btn" id="prev">
+                <div class="arrow-bg"></div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#fff" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
+                    <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
+                </svg>
+            </button>
+            <button class="arrow-btn" id="next">
+                <div class="arrow-bg"></div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#fff" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                    <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="indicators">
+            <div class="numbers">01</div>
+            <div class="dots">
+                <div class="dot active">
+                    <div class="dot-glow"></div>
+                </div>
+                <div class="dot">
+                    <div class="dot-glow"></div>
+                </div>
+                <div class="dot">
+                    <div class="dot-glow"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+    
+    <!-- Script de debug para navegação -->
+    <script>
+        console.log('🔍 Debug de navegação carregado');
+        console.log('Página atual:', window.location.pathname);
+        console.log('Host:', window.location.host);
+        console.log('Origin:', window.location.origin);
+        
+        // Verificar se arquivos existem
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar se script.js carregou
+            setTimeout(() => {
+                const scripts = document.querySelectorAll('script[src="script.js"]');
+                console.log('Scripts encontrados:', scripts.length);
+                
+                // Testar navegação para produtos
+                const produtoLink = document.querySelector('.nav-item:nth-child(2) a');
+                if (produtoLink) {
+                    console.log('Link produtos encontrado:', produtoLink.href);
+                } else {
+                    console.error('❌ Link produtos não encontrado!');
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>

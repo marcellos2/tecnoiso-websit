@@ -11,28 +11,23 @@ document.addEventListener('DOMContentLoaded', function() {
     const total = items.length;
     let timer;
     let isTransitioning = false;
+    let isCarouselPaused = false;
 
-    // Verificar se GSAP está carregado
     function checkGSAP() {
         if (typeof gsap === 'undefined') {
-            console.error('❌ GSAP não está carregado! Verifique se o script está incluído no HTML.');
+            console.error('❌ GSAP não está carregado!');
             return false;
         }
-        console.log('✅ GSAP carregado com sucesso!');
         return true;
     }
 
-    // Função para verificar se estamos na página index.html
     function isIndexPage() {
         return window.location.pathname.endsWith('index.html') || 
                window.location.pathname === '/' ||
                window.location.pathname.endsWith('/');
     }
 
-    // Função para navegar para produtos
     function navigateToProducts() {
-        console.log('Navegando para produtos...');
-        
         const possiblePaths = [
             'produtos/produtos.html',
             './produtos/produtos.html',
@@ -46,7 +41,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Configurar navegação do menu
     function setupNavigation() {
         const navItems = document.querySelectorAll('.nav-item');
         
@@ -54,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const link = navItem.querySelector('a');
             const span = navItem.querySelector('span');
             
-            if (index === 1) { // Item "Produtos"
+            if (index === 1) {
                 const clickHandler = function(e) {
                     e.preventDefault();
                     navigateToProducts();
@@ -68,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 navItem.style.cursor = 'pointer';
                 
-            } else if (index === 0) { // Item "Home"
+            } else if (index === 0) {
                 if (link) {
                     link.addEventListener('click', function(e) {
                         e.preventDefault();
@@ -77,21 +71,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     });
                 }
-            } else if (index === 2) { // Item "Contato"
-                navItem.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    alert('Página de contato em desenvolvimento!\n\nEmail: contato@tecnoiso.com\nTelefone: (47) 99999-9999');
-                });
-                navItem.style.cursor = 'pointer';
             }
         });
     }
 
-    // Funções de animação GSAP - Com fallback se GSAP não estiver disponível
     function animateSlideTransition(currentItem, nextItem, direction) {
         return new Promise((resolve) => {
             if (!checkGSAP()) {
-                // Fallback sem GSAP
                 currentItem.style.opacity = '0';
                 resolve();
                 return;
@@ -110,7 +96,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function animateNewSlide(nextItem, direction) {
         if (!checkGSAP()) {
-            // Fallback sem GSAP
             nextItem.style.opacity = '1';
             nextItem.style.transform = 'translateX(0) rotateY(0)';
             return;
@@ -136,12 +121,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const priceContainer = item.querySelector('.price-container');
         const img = item.querySelector('.product-img img');
         
-        // Reset inicial
         gsap.set(words, { y: 100, rotationX: 90, opacity: 0 });
         gsap.set([description, priceContainer], { y: 30, opacity: 0 });
         gsap.set(img, { x: 300, rotationY: 45, opacity: 0 });
         
-        // Animações
         gsap.to(words, {
             y: 0,
             rotationX: 0,
@@ -161,7 +144,6 @@ document.addEventListener('DOMContentLoaded', function() {
             delay: 0.5
         });
         
-        // Animar descrição se estiver visível
         const moreInfo = item.querySelector('.more-info');
         if (moreInfo && moreInfo.classList.contains('show')) {
             gsap.to([description, priceContainer], {
@@ -175,9 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     async function update(direction) {
-        if (isTransitioning || total === 0) return;
-        
-        console.log(`🔄 Atualizando slide: direção ${direction}, ativo atual: ${active}`);
+        if (isTransitioning || total === 0 || isCarouselPaused) return;
         
         isTransitioning = true;
 
@@ -185,7 +165,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const currentDot = document.querySelector(".dot.active");
         
         if (!currentItem || !currentDot) {
-            console.error('❌ Item ou dot ativo não encontrado!');
             isTransitioning = false;
             return;
         }
@@ -195,37 +174,30 @@ document.addEventListener('DOMContentLoaded', function() {
         const nextDot = dots[next];
 
         if (!nextItem || !nextDot) {
-            console.error('❌ Próximo item ou dot não encontrado!');
             isTransitioning = false;
             return;
         }
 
-        // Executar transição
         await animateSlideTransition(currentItem, nextItem, direction);
         
-        // Atualizar classes
         currentItem.classList.remove("active");
         currentDot.classList.remove("active");
         
         nextItem.classList.add("active");
         nextDot.classList.add("active");
         
-        // Animar novo slide
         animateNewSlide(nextItem, direction);
         animateSlideElements(nextItem);
 
         active = next;
         updateNumberWithEffect(active + 1);
         isTransitioning = false;
-        
-        console.log(`✅ Slide atualizado para: ${active + 1}`);
     }
 
     function updateNumberWithEffect(num) {
         if (!numbersIndicator) return;
 
         if (!checkGSAP()) {
-            // Fallback sem GSAP
             numbersIndicator.textContent = String(num).padStart(2, "0");
             return;
         }
@@ -250,12 +222,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function startTimer() {
         clearInterval(timer);
         
-        // Só iniciar timer se tivermos slides válidos
-        if (total > 1) {
+        if (total > 1 && !isCarouselPaused) {
             timer = setInterval(() => {
                 update(1);
             }, 5000);
-            console.log('⏰ Timer iniciado (5s)');
         }
     }
 
@@ -263,7 +233,6 @@ document.addEventListener('DOMContentLoaded', function() {
         infoButtons.forEach(button => {
             button.addEventListener('click', function(e) {
                 e.preventDefault();
-                console.log('🔘 Botão info clicado');
                 
                 const moreInfo = this.parentElement.querySelector('.more-info');
                 if (!moreInfo) return;
@@ -274,8 +243,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     btnText.textContent = isShowing ? 'Mostrar menos' : 'Saiba mais';
                 }
                 
+                isCarouselPaused = isShowing;
+                const list = document.querySelector('.list');
+                if (isCarouselPaused) {
+                    list.classList.add('paused');
+                    clearInterval(timer);
+                } else {
+                    list.classList.remove('paused');
+                    startTimer();
+                }
+
                 if (!checkGSAP()) {
-                    // Fallback sem GSAP
                     moreInfo.style.display = isShowing ? 'block' : 'none';
                     return;
                 }
@@ -316,7 +294,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (prevButton) {
             prevButton.addEventListener('click', function(e) {
                 e.preventDefault();
-                console.log('⬅️ Botão anterior clicado');
                 update(-1);
                 startTimer();
             });
@@ -325,7 +302,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (nextButton) {
             nextButton.addEventListener('click', function(e) {
                 e.preventDefault();
-                console.log('➡️ Botão próximo clicado');
                 update(1);
                 startTimer();
             });
@@ -336,8 +312,6 @@ document.addEventListener('DOMContentLoaded', function() {
         dots.forEach((dot, index) => {
             dot.addEventListener("click", (e) => {
                 e.preventDefault();
-                console.log(`🔘 Dot ${index + 1} clicado`);
-                
                 if (index !== active) {
                     update(index - active);
                     startTimer();
@@ -355,7 +329,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const currentScrollY = window.scrollY;
             
             if (!checkGSAP()) {
-                // Fallback sem GSAP
                 if (currentScrollY > lastScrollY && currentScrollY > 100) {
                     header.style.transform = 'translateY(-100px)';
                     header.style.opacity = '0.8';
@@ -388,11 +361,9 @@ document.addEventListener('DOMContentLoaded', function() {
     function setupKeyboardNavigation() {
         document.addEventListener('keydown', e => {
             if (e.key === 'ArrowLeft') {
-                console.log('⌨️ Seta esquerda pressionada');
                 update(-1);
                 startTimer();
             } else if (e.key === 'ArrowRight') {
-                console.log('⌨️ Seta direita pressionada');
                 update(1);
                 startTimer();
             }
@@ -417,26 +388,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function debugInfo() {
-        console.log('🔍 Debug do Slider:');
-        console.log('- Total de items:', total);
-        console.log('- Items encontrados:', items.length);
-        console.log('- Dots encontrados:', dots.length);
-        console.log('- Botões info encontrados:', infoButtons.length);
-        console.log('- Item ativo atual:', active);
-        console.log('- É página index?', isIndexPage());
-        console.log('- GSAP disponível?', typeof gsap !== 'undefined');
-        
-        // Verificar se elementos necessários existem
-        if (items.length === 0) console.warn('⚠️ Nenhum item .item encontrado!');
-        if (dots.length === 0) console.warn('⚠️ Nenhum dot .dot encontrado!');
-        if (!prevButton) console.warn('⚠️ Botão #prev não encontrado!');
-        if (!nextButton) console.warn('⚠️ Botão #next não encontrado!');
-        if (!numbersIndicator) console.warn('⚠️ Indicador .numbers não encontrado!');
-    }
-
     function initializeSlider() {
-        // Garantir que o primeiro item está ativo
         if (items.length > 0) {
             items.forEach(item => item.classList.remove('active'));
             items[0].classList.add('active');
@@ -447,30 +399,20 @@ document.addEventListener('DOMContentLoaded', function() {
             dots[0].classList.add('active');
         }
         
-        // Animar primeiro slide
         if (items[0]) {
             animateSlideElements(items[0]);
         }
         
-        // Atualizar contador
         updateNumberWithEffect(1);
     }
 
     function init() {
-        console.log('🚀 Inicializando Tecnoiso Enhanced...');
-        
-        // Debug inicial
-        debugInfo();
-        
-        // Verificar GSAP
         checkGSAP();
         
-        // Inicializar slider se estivermos na página index
         if (isIndexPage() && total > 0) {
             initializeSlider();
         }
         
-        // Animações iniciais do header
         if (checkGSAP()) {
             gsap.from('header', {
                 y: -50,
@@ -497,7 +439,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
-        // Configurar todas as interações
         setupNavigation();
         setupButtonInteractions();
         setupArrowInteractions();
@@ -506,18 +447,14 @@ document.addEventListener('DOMContentLoaded', function() {
         setupKeyboardNavigation();
         setupCart();
         
-        // Iniciar timer se estivermos na página index
         if (isIndexPage()) {
             startTimer();
         }
-        
-        console.log('✅ Tecnoiso Enhanced inicializado com sucesso!');
     }
 
-    // Inicializar tudo
     init();
 
-    // Código Konami mantido
+    // Código Konami
     let konami = [];
     const konamiCode = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
 
@@ -532,8 +469,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function createMatrixRain() {
-        console.log("🎮 Konami code activated!");
-        
         const matrixContainer = document.createElement('div');
         matrixContainer.style.cssText = `
             position: fixed;

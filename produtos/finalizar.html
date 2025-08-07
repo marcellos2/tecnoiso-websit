@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tecnoiso - Finalizar Compra</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            list-style: none;
+            font-family: "Montserrat", sans-serif;
+        }
+
+        body {
+            background: #000;
+            color: #fff;
+            font-size: 16px;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Particle Background */
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #ff0000;
+            border-radius: 50%;
+            animation: float-particle 20s infinite linear;
+            opacity: 0.6;
+        }
+
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 20%; animation-delay: 2s; }
+        .particle:nth-child(3) { left: 30%; animation-delay: 4s; }
+        .particle:nth-child(4) { left: 40%; animation-delay: 6s; }
+        .particle:nth-child(5) { left: 50%; animation-delay: 8s; }
+        .particle:nth-child(6) { left: 60%; animation-delay: 10s; }
+        .particle:nth-child(7) { left: 70%; animation-delay: 12s; }
+        .particle:nth-child(8) { left: 80%; animation-delay: 14s; }
+
+        @keyframes float-particle {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+                transform: scale(1);
+            }
+            90% {
+                opacity: 0.6;
+                transform: scale(1);
+            }
+            100% {
+                transform: translateY(-100vh) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* Animated grid background */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 0, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 0, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: grid-move 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes grid-move {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            width: 100vw;
+            top: 0;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 0, 0, 0.2);
+        }
+
+        .logo-text {
+            font-family: "Orbitron", sans-serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: #ff0000;
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ff0000;
+        }
+
+        /* Main Container */
+        .checkout-container {
+            padding: 120px 20px 50px;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .checkout-title {
+            font-family: "Orbitron", sans-serif;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 40px;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+        }
+
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 40px;
+            align-items: start;
+        }
+
+        /* Left Column - Forms */
+        .checkout-forms {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .form-section {
+            background: rgba(20, 20, 20, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(255, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .form-section:hover {
+            border-color: rgba(255, 0, 0, 0.4);
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-family: "Orbitron", sans-serif;
+            font-size: 1.3rem;
+            color: #ff0000;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-icon {
+            width: 24px;
+            height: 24px;
+            fill: #ff0000;
+        }
+
+        /* Delivery Options */
+        .delivery-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .delivery-option {
+            position: relative;
+            background: rgba(40, 40, 40, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .delivery-option:hover {
+            border-color: rgba(255, 0, 0, 0.3);
+            background: rgba(60, 60, 60, 0.5);
+        }
+
+        .delivery-option.active {
+            border-color: #ff0000;
+            background: rgba(255, 0, 0, 0.1);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+
+        .delivery-option input[type="radio"] {
+            display: none;
+        }
+
+        .delivery-icon {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 10px;
+            fill: #fff;
+        }
+
+        .delivery-option.active .delivery-icon {
+            fill: #ff0000;
+        }
+
+        .delivery-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #fff;
+        }
+
+        .delivery-option.active .delivery-title {
+            color: #ff0000;
+        }
+
+        .delivery-description {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        .delivery-price {
+            font-weight: bold;
+            color: #ff0000;
+            margin-top: 8px;
+        }
+
+        /* Address Form */
+        .address-form {
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        .address-form.active {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Form Inputs */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(40, 40, 40, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #ff0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+            background: rgba(60, 60, 60, 0.8);
+        }
+
+        input::placeholder {
+            color: #888;
+        }
+
+        /* Payment Methods */
+        .payment-methods {
+            display: grid;
+            gap: 15px;
+        }
+
+        .payment-option {
+            position: relative;
+            background: rgba(40, 40, 40, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .payment-option:hover {
+            border-color: rgba(255, 0, 0, 0.3);
+            background: rgba(60, 60, 60, 0.5);
+        }
+
+        .payment-option.active {
+            border-color: #ff0000;
+            background: rgba(255, 0, 0, 0.1);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+
+        .payment-option input[type="radio"] {
+            display: none;
+        }
+
+        .payment-icon {
+            width: 40px;
+            height: 40px;
+            fill: #fff;
+        }
+
+        .payment-option.active .payment-icon {
+            fill: #ff0000;
+        }
+
+        .payment-info {
+            flex: 1;
+        }
+
+        .payment-name {
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .payment-option.active .payment-name {
+            color: #ff0000;
+        }
+
+        .payment-desc {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        /* Credit Card Form */
+        .card-form {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(60, 60, 60, 0.3);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 0, 0, 0.2);
+        }
+
+        .card-form.active {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        /* Right Column - Order Summary */
+        .order-summary {
+            background: rgba(20, 20, 20, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(255, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 120px;
+        }
+
+        .summary-title {
+            font-family: "Orbitron", sans-serif;
+            font-size: 1.3rem;
+            color: #ff0000;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .order-items {
+            margin-bottom: 20px;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-name {
+            font-weight: 500;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .item-details {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        .item-price {
+            font-weight: bold;
+            color: #ff0000;
+        }
+
+        /* Summary Totals */
+        .summary-totals {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 20px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .total-row.final {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ff0000;
+            border-top: 1px solid rgba(255, 0, 0, 0.3);
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        /* Buttons */
+        .btn {
+            position: relative;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            background: transparent;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        .btn-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff0000, #cc0000);
+            opacity: 0.9;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .btn-text {
+            position: relative;
+            z-index: 3;
+        }
+
+        .btn:hover .btn-bg {
+            opacity: 1;
+            transform: scale(1.02);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary .btn-bg {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Loading State */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Success Modal */
+        .success-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .success-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .success-content {
+            background: rgba(20, 20, 20, 0.95);
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            border: 2px solid #ff0000;
+            box-shadow: 0 0 50px rgba(255, 0, 0, 0.5);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            fill: #00ff00;
+            margin-bottom: 20px;
+        }
+
+        .success-title {
+            font-family: "Orbitron", sans-serif;
+            font-size: 2rem;
+            color: #00ff00;
+            margin-bottom: 20px;
+        }
+
+        .order-number {
+            font-size: 1.2rem;
+            color: #ff0000;
+            margin-bottom: 20px;
+        }
+
+        .success-message {
+            color: #fff;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .empty-cart-message {
+            text-align: center;
+            padding: 40px 20px;
+            color: #aaa;
+        }
+
+        .empty-cart-message h3 {
+            color: #ff0000;
+            margin-bottom: 15px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .checkout-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .order-summary {
+                position: relative;
+                top: 0;
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 20px;
+            }
+
+            .checkout-container {
+                padding: 100px 15px 30px;
+            }
+
+            .checkout-title {
+                font-size: 2rem;
+            }
+
+            .form-section, .order-summary {
+                padding: 20px;
+            }
+
+            .delivery-options {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .checkout-title {
+                font-size: 1.8rem;
+            }
+
+            .logo-text {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Particle background -->
+    <div class="particles-container">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- Animated grid background -->
+    <div class="grid-bg"></div>
+
+    <header>
+        <a href="index.html" class="logo-text">Tecnoiso</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="produtos.html">Produtos</a>
+            <a href="#">Contato</a>
+        </div>
+    </header>
+
+    <main class="checkout-container">
+        <h1 class="checkout-title">Finalizar Compra</h1>
+        
+        <div class="checkout-grid">
+            <!-- Left Column - Forms -->
+            <div class="checkout-forms">
+                <!-- Delivery Section -->
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <svg class="section-icon" viewBox="0 0 24 24">
+                            <path d="M3,4A2,2 0 0,0 1,6V17H3A3,3 0 0,0 6,20A3,3 0 0,0 9,17H15A3,3 0 0,0 18,20A3,3 0 0,0 21,17H23V12L20,8H17V4M10,6L14,10L10,14V11H4V9H10M17,9.5H19.5L21.47,12H17M6,15.5A1.5,1.5 0 0,1 7.5,17A1.5,1.5 0 0,1 6,18.5A1.5,1.5 0 0,1 4.5,17A1.5,1.5 0 0,1 6,15.5M18,15.5A1.5,1.5 0 0,1 19.5,17A1.5,1.5 0 0,1 18,18.5A1.5,1.5 0 0,1 16.5,17A1.5,1.5 0 0,1 18,15.5Z"/>
+                        </svg>
+                        Entrega
+                    </h3>
+                    
+                    <div class="delivery-options">
+                        <label class="delivery-option active" for="pickup">
+                            <input type="radio" id="pickup" name="delivery" value="pickup" checked>
+                            <svg class="delivery-icon" viewBox="0 0 24 24">
+                                <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6Z"/>
+                            </svg>
+                            <div class="delivery-title">Retirada na Loja</div>
+                            <div class="delivery-description">Retire em nossa loja física</div>
+                            <div class="delivery-price">Grátis</div>
+                        </label>
+                        
+                        <label class="delivery-option" for="delivery">
+                            <input type="radio" id="delivery" name="delivery" value="delivery">
+                            <svg class="delivery-icon" viewBox="0 0 24 24">
+                                <path d="M3,4A2,2 0 0,0 1,6V17H3A3,3 0 0,0 6,20A3,3 0 0,0 9,17H15A3,3 0 0,0 18,20A3,3 0 0,0 21,17H23V12L20,8H17V4M10,6L14,10L10,14V11H4V9H10M17,9.5H19.5L21.47,12H17M6,15.5A1.5,1.5 0 0,1 7.5,17A1.5,1.5 0 0,1 6,18.5A1.5,1.5 0 0,1 4.5,17A1.5,1.5 0 0,1 6,15.5M18,15.5A1.5,1.5 0 0,1 19.5,17A1.5,1.5 0 0,1 18,18.5A1.5,1.5 0 0,1 16.5,17A1.5,1.5 0 0,1 18,15.5Z"/>
+                            </svg>
+                            <div class="delivery-title">Entrega</div>
+                            <div class="delivery-description">Entrega em até 5 dias úteis</div>
+                            <div class="delivery-price">R$ 15,00</div>
+                        </label>
+                    </div>
+                    
+                    <!-- Address Form -->
+                    <div class="address-form" id="addressForm">
+                        <div class="form-group">
+                            <label for="cep">CEP *</label>
+                            <input type="text" id="cep" placeholder="00000-000" maxlength="9">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city">Cidade *</label>
+                                <input type="text" id="city" placeholder="Sua cidade">
+                            </div>
+                            <div class="form-group">
+                                <label for="state">Estado *</label>
+                                <select id="state">
+                                    <option value="">Selecione</option>
+                                    <option value="AC">Acre</option>
+                                    <option value="AL">Alagoas</option>
+                                    <option value="AP">Amapá</option>
+                                    <option value="AM">Amazonas</option>
+                                    <option value="BA">Bahia</option>
+                                    <option value="CE">Ceará</option>
+                                    <option value="DF">Distrito Federal</option>
+                                    <option value="ES">Espírito Santo</option>
+                                    <option value="GO">Goiás</option>
+                                    <option value="MA">Maranhão</option>
+                                    <option value="MT">Mato Grosso</option>
+                                    <option value="MS">Mato Grosso do Sul</option>
+                                    <option value="MG">Minas Gerais</option>
+                                    <option value="PA">Pará</option>
+                                    <option value="PB">Paraíba</option>
+                                    <option value="PR">Paraná</option>
+                                    <option value="PE">Pernambuco</option>
+                                    <option value="PI">Piauí</option>
+                                    <option value="RJ">Rio de Janeiro</option>
+                                    <option value="RN">Rio Grande do Norte</option>
+                                    <option value="RS">Rio Grande do Sul</option>
+                                    <option value="RO">Rondônia</option>
+                                    <option value="RR">Roraima</option>
+                                    <option value="SC">Santa Catarina</option>
+                                    <option value="SP">São Paulo</option>
+                                    <option value="SE">Sergipe</option>
+                                    <option value="TO">Tocantins</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="street">Rua *</label>
+                            <input type="text" id="street" placeholder="Nome da rua">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="number">Número *</label>
+                                <input type="text" id="number" placeholder="123">
+                            </div>
+                            <div class="form-group">
+                                <label for="complement">Complemento</label>
+                                <input type="text" id="complement" placeholder="Apto, bloco, etc.">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="neighborhood">Bairro *</label>
+                            <input type="text" id="neighborhood" placeholder="Nome do bairro">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer Info Section -->
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <svg class="section-icon" viewBox="0 0 24 24">
+                            <path d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"/>
+                        </svg>
+                        Dados Pessoais
+                    </h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">Nome *</label>
+                            <input type="text" id="firstName" placeholder="Seu nome" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Sobrenome *</label>
+                            <input type="text" id="lastName" placeholder="Seu sobrenome" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-mail *</label>
+                        <input type="email" id="email" placeholder="seu@email.com" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone">Telefone *</label>
+                            <input type="tel" id="phone" placeholder="(11) 99999-9999" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cpf">CPF *</label>
+                            <input type="text" id="cpf" placeholder="000.000.000-00" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Section -->
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <svg class="section-icon" viewBox="0 0 24 24">
+                            <path d="M20,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6C22,4.89 21.1,4 20,4M20,8V6H4V8H20Z"/>
+                        </svg>
+                        Forma de Pagamento
+                    </h3>
+                    
+                    <div class="payment-methods">
+                        <label class="payment-option" for="pix">
+                            <input type="radio" id="pix" name="payment" value="pix">
+                            <svg class="payment-icon" viewBox="0 0 24 24">
+                                <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,6A6,6 0 0,1 18,12A6,6 0 0,1 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6Z"/>
+                            </svg>
+                            <div class="payment-info">
+                                <div class="payment-name">PIX</div>
+                                <div class="payment-desc">Pagamento instantâneo - 5% de desconto</div>
+                            </div>
+                        </label>
+                        
+                        <label class="payment-option" for="credit">
+                            <input type="radio" id="credit" name="payment" value="credit">
+                            <svg class="payment-icon" viewBox="0 0 24 24">
+                                <path d="M20,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6C22,4.89 21.1,4 20,4M20,8V6H4V8H20Z"/>
+                            </svg>
+                            <div class="payment-info">
+                                <div class="payment-name">Cartão de Crédito</div>
+                                <div class="payment-desc">Parcelamento em até 12x sem juros</div>
+                            </div>
+                        </label>
+                        
+                        <label class="payment-option" for="debit">
+                            <input type="radio" id="debit" name="payment" value="debit">
+                            <svg class="payment-icon" viewBox="0 0 24 24">
+                                <path d="M20,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V6C22,4.89 21.1,4 20,4M20,8V6H4V8H20Z"/>
+                            </svg>
+                            <div class="payment-info">
+                                <div class="payment-name">Cartão de Débito</div>
+                                <div class="payment-desc">Débito à vista</div>
+                            </div>
+                        </label>
+                        
+                        <label class="payment-option" for="boleto">
+                            <input type="radio" id="boleto" name="payment" value="boleto">
+                            <svg class="payment-icon" viewBox="0 0 24 24">
+                                <path d="M4,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M4,6V18H20V6H4Z"/>
+                            </svg>
+                            <div class="payment-info">
+                                <div class="payment-name">Boleto Bancário</div>
+                                <div class="payment-desc">Pagamento em até 3 dias úteis</div>
+                            </div>
+                        </label>
+                    </div>
+                    
+                    <!-- Credit Card Form -->
+                    <div class="card-form" id="cardForm">
+                        <h4 style="color: #ff0000; margin-bottom: 15px;">Dados do Cartão</h4>
+                        <div class="form-group">
+                            <label for="cardNumber">Número do Cartão *</label>
+                            <input type="text" id="cardNumber" placeholder="0000 0000 0000 0000" maxlength="19">
+                        </div>
+                        <div class="form-group">
+                            <label for="cardName">Nome no Cartão *</label>
+                            <input type="text" id="cardName" placeholder="Nome como está no cartão">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="cardExpiry">Validade *</label>
+                                <input type="text" id="cardExpiry" placeholder="MM/AA" maxlength="5">
+                            </div>
+                            <div class="form-group">
+                                <label for="cardCvv">CVV *</label>
+                                <input type="text" id="cardCvv" placeholder="000" maxlength="4">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="installments">Parcelas</label>
+                            <select id="installments">
+                                <option value="1">1x à vista</option>
+                                <option value="2">2x sem juros</option>
+                                <option value="3">3x sem juros</option>
+                                <option value="4">4x sem juros</option>
+                                <option value="5">5x sem juros</option>
+                                <option value="6">6x sem juros</option>
+                                <option value="7">7x sem juros</option>
+                                <option value="8">8x sem juros</option>
+                                <option value="9">9x sem juros</option>
+                                <option value="10">10x sem juros</option>
+                                <option value="11">11x sem juros</option>
+                                <option value="12">12x sem juros</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Order Summary -->
+            <div class="order-summary">
+                <h3 class="summary-title">Resumo do Pedido</h3>
+                
+                <div class="order-items" id="orderItems">
+                    <!-- Items will be populated by JavaScript -->
+                </div>
+                
+                <div class="summary-totals">
+                    <div class="total-row">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">R$ 0,00</span>
+                    </div>
+                    <div class="total-row">
+                        <span>Entrega:</span>
+                        <span id="deliveryFee">Grátis</span>
+                    </div>
+                    <div class="total-row" id="discountRow" style="display: none;">
+                        <span>Desconto PIX (5%):</span>
+                        <span id="discount" style="color: #00ff00;">-R$ 0,00</span>
+                    </div>
+                    <div class="total-row final">
+                        <span>Total:</span>
+                        <span id="finalTotal">R$ 0,00</span>
+                    </div>
+                </div>
+                
+                <button class="btn" id="finishOrderBtn">
+                    <span class="btn-text">Finalizar Pedido</span>
+                    <div class="btn-bg"></div>
+                </button>
+                
+                <button class="btn btn-secondary" id="backToCartBtn">
+                    <span class="btn-text">Voltar aos Produtos</span>
+                    <div class="btn-bg"></div>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Success Modal -->
+    <div class="success-modal" id="successModal">
+        <div class="success-content">
+            <svg class="success-icon" viewBox="0 0 24 24">
+                <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M11,16.5L18,9.5L16.59,8.09L11,13.67L7.91,10.59L6.5,12L11,16.5Z"/>
+            </svg>
+            <h2 class="success-title">Pedido Confirmado!</h2>
+            <div class="order-number" id="orderNumber">Pedido #000000</div>
+            <p class="success-message">
+                Seu pedido foi processado com sucesso! Você receberá um e-mail de confirmação em breve com todos os detalhes.
+            </p>
+            <button class="btn" id="newOrderBtn">
+                <span class="btn-text">Fazer Novo Pedido</span>
+                <div class="btn-bg"></div>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Carregar carrinho do localStorage
+            let cart = [];
+            
+            try {
+                const savedCart = localStorage.getItem('cart');
+                if (savedCart) {
+                    cart = JSON.parse(savedCart);
+                }
+            } catch(e) {
+                console.warn('Erro ao carregar carrinho do localStorage');
+            }
+
+            let deliveryFee = 0;
+            let pixDiscount = 0;
+
+            // Elementos DOM
+            const deliveryOptions = document.querySelectorAll('input[name="delivery"]');
+            const paymentOptions = document.querySelectorAll('input[name="payment"]');
+            const addressForm = document.getElementById('addressForm');
+            const cardForm = document.getElementById('cardForm');
+            const cepInput = document.getElementById('cep');
+            const phoneInput = document.getElementById('phone');
+            const cpfInput = document.getElementById('cpf');
+            const cardNumberInput = document.getElementById('cardNumber');
+            const cardExpiryInput = document.getElementById('cardExpiry');
+            const finishOrderBtn = document.getElementById('finishOrderBtn');
+            const backToCartBtn = document.getElementById('backToCartBtn');
+            const successModal = document.getElementById('successModal');
+
+            // Inicializar
+            updateOrderSummary();
+            setupEventListeners();
+            applyInputMasks();
+
+            function setupEventListeners() {
+                // Opções de entrega
+                deliveryOptions.forEach(option => {
+                    option.addEventListener('change', handleDeliveryChange);
+                });
+
+                // Opções de pagamento
+                paymentOptions.forEach(option => {
+                    option.addEventListener('change', handlePaymentChange);
+                });
+
+                // Busca de CEP
+                if (cepInput) {
+                    cepInput.addEventListener('blur', lookupAddress);
+                }
+
+                // Submissão do pedido
+                finishOrderBtn.addEventListener('click', handleOrderSubmission);
+                backToCartBtn.addEventListener('click', () => {
+                    window.location.href = 'produtos.html';
+                });
+
+                // Modal de sucesso
+                document.getElementById('newOrderBtn').addEventListener('click', () => {
+                    localStorage.removeItem('cart');
+                    window.location.href = 'produtos.html';
+                });
+
+                // Fechar modal com ESC
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && successModal.classList.contains('active')) {
+                        successModal.classList.remove('active');
+                    }
+                });
+            }
+
+            function handleDeliveryChange(e) {
+                const isDelivery = e.target.value === 'delivery';
+                
+                // Atualizar taxa de entrega
+                deliveryFee = isDelivery ? 15.00 : 0;
+                
+                // Mostrar/esconder formulário de endereço
+                if (isDelivery) {
+                    addressForm.classList.add('active');
+                    makeAddressFieldsRequired(true);
+                } else {
+                    addressForm.classList.remove('active');
+                    makeAddressFieldsRequired(false);
+                }
+                
+                // Atualizar estado visual
+                document.querySelectorAll('.delivery-option').forEach(opt => {
+                    opt.classList.remove('active');
+                });
+                e.target.closest('.delivery-option').classList.add('active');
+                
+                updateOrderSummary();
+            }
+
+            function handlePaymentChange(e) {
+                const isPix = e.target.value === 'pix';
+                const isCredit = e.target.value === 'credit';
+                
+                // Mostrar/esconder formulário do cartão
+                if (isCredit) {
+                    cardForm.classList.add('active');
+                    makeCardFieldsRequired(true);
+                } else {
+                    cardForm.classList.remove('active');
+                    makeCardFieldsRequired(false);
+                }
+                
+                // Atualizar desconto PIX
+                if (isPix) {
+                    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    pixDiscount = subtotal * 0.05; // 5% de desconto
+                } else {
+                    pixDiscount = 0;
+                }
+                
+                // Atualizar estado visual
+                document.querySelectorAll('.payment-option').forEach(opt => {
+                    opt.classList.remove('active');
+                });
+                e.target.closest('.payment-option').classList.add('active');
+                
+                updateOrderSummary();
+            }
+
+            function makeAddressFieldsRequired(required) {
+                const fields = ['cep', 'city', 'street', 'number', 'neighborhood'];
+                fields.forEach(field => {
+                    const input = document.getElementById(field);
+                    if (input) {
+                        if (required) {
+                            input.setAttribute('required', '');
+                        } else {
+                            input.removeAttribute('required');
+                        }
+                    }
+                });
+            }
+
+            function makeCardFieldsRequired(required) {
+                const fields = ['cardNumber', 'cardName', 'cardExpiry', 'cardCvv'];
+                fields.forEach(field => {
+                    const input = document.getElementById(field);
+                    if (input) {
+                        if (required) {
+                            input.setAttribute('required', '');
+                        } else {
+                            input.removeAttribute('required');
+                        }
+                    }
+                });
+            }
+
+            function updateOrderSummary() {
+                const orderItems = document.getElementById('orderItems');
+                const subtotalEl = document.getElementById('subtotal');
+                const deliveryFeeEl = document.getElementById('deliveryFee');
+                const discountEl = document.getElementById('discount');
+                const discountRow = document.getElementById('discountRow');
+                const finalTotalEl = document.getElementById('finalTotal');
+
+                // Verificar se o carrinho está vazio
+                if (cart.length === 0) {
+                    orderItems.innerHTML = `
+                        <div class="empty-cart-message">
+                            <h3>Carrinho Vazio</h3>
+                            <p>Você não possui itens no carrinho. Adicione produtos para continuar.</p>
+                        </div>
+                    `;
+                    finishOrderBtn.disabled = true;
+                    return;
+                }
+
+                // Limpar itens anteriores
+                orderItems.innerHTML = '';
+
+                // Calcular subtotal
+                let subtotal = 0;
+                
+                // Adicionar itens ao resumo
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    subtotal += itemTotal;
+
+                    const itemEl = document.createElement('div');
+                    itemEl.className = 'order-item';
+                    itemEl.innerHTML = `
+                        <div class="item-info">
+                            <div class="item-name">${item.name}</div>
+                            <div class="item-details">Qtd: ${item.quantity}</div>
+                        </div>
+                        <div class="item-price">R$ ${itemTotal.toFixed(2).replace('.', ',')}</div>
+                    `;
+                    orderItems.appendChild(itemEl);
+                });
+
+                // Atualizar totais
+                subtotalEl.textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+                deliveryFeeEl.textContent = deliveryFee > 0 ? `R$ ${deliveryFee.toFixed(2).replace('.', ',')}` : 'Grátis';
+                
+                // Mostrar/esconder desconto
+                if (pixDiscount > 0) {
+                    discountRow.style.display = 'flex';
+                    discountEl.textContent = `-R$ ${pixDiscount.toFixed(2).replace('.', ',')}`;
+                } else {
+                    discountRow.style.display = 'none';
+                }
+
+                // Calcular total final
+                const finalTotal = subtotal + deliveryFee - pixDiscount;
+                finalTotalEl.textContent = `R$ ${finalTotal.toFixed(2).replace('.', ',')}`;
+                
+                finishOrderBtn.disabled = false;
+            }
+
+            function applyInputMasks() {
+                // Máscara CEP
+                if (cepInput) {
+                    cepInput.addEventListener('input', function(e) {
+                        let value = e.target.value.replace(/\D/g, '');
+                        if (value.length <= 8) {
+                            value = value.replace(/(\d{5})(\d)/, '$1-$2');
+                            e.target.value = value;
+                        }
+                    });
+                }
+
+                // Máscara telefone
+                if (phoneInput) {
+                    phoneInput.addEventListener('input', function(e) {
+                        let value = e.target.value.replace(/\D/g, '');
+                        if (value.length <= 11) {
+                            value = value.replace(/(\d{2})(\d{5})(\d)/, '($1) $2-$3');
+                            if (value.length < 14) {
+                                value = value.replace(/(\d{2})(\d{4})(\d)/, '($1) $2-$3');
+                            }
+                            e.target.value = value;
+                        }
+                    });
+                }
+
+                // Máscara CPF
+                if (cpfInput) {
+                    cpfInput.addEventListener('input', function(e) {
+                        let value = e.target.value.replace(/\D/g, '');
+                        if (value.length <= 11) {
+                            value = value.replace(/(\d{3})(\d{3})(\d{3})(\d)/, '$1.$2.$3-$4');
+                            e.target.value = value;
+                        }
+                    });
+                }
+
+                // Máscara cartão de crédito
+                if (cardNumberInput) {
+                    cardNumberInput.addEventListener('input', function(e) {
+                        let value = e.target.value.replace(/\D/g, '');
+                        if (value.length <= 16) {
+                            value = value.replace(/(\d{4})(\d{4})(\d{4})(\d)/, '$1 $2 $3 $4');
+                            e.target.value = value;
+                        }
+                    });
+                }
+
+                // Máscara validade cartão
+                if (cardExpiryInput) {
+                    cardExpiryInput.addEventListener('input', function(e) {
+                        let value = e.target.value.replace(/\D/g, '');
+                        if (value.length <= 4) {
+                            value = value.replace(/(\d{2})(\d)/, '$1/$2');
+                            e.target.value = value;
+                        }
+                    });
+                }
+            }
+
+            function lookupAddress() {
+                const cep = cepInput.value.replace(/\D/g, '');
+                if (cep.length === 8) {
+                    fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (!data.erro) {
+                                document.getElementById('city').value = data.localidade || '';
+                                document.getElementById('street').value = data.logradouro || '';
+                                document.getElementById('neighborhood').value = data.bairro || '';
+                                document.getElementById('state').value = data.uf || '';
+                            }
+                        })
+                        .catch(error => {
+                            console.warn('Erro ao buscar CEP:', error);
+                        });
+                }
+            }
+
+            function validateForm() {
+                const requiredFields = document.querySelectorAll('input[required], select[required]');
+                let isValid = true;
+
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        field.style.borderColor = '#ff0000';
+                        isValid = false;
+                    } else {
+                        field.style.borderColor = '';
+                    }
+                });
+
+                // Validar método de pagamento
+                const paymentSelected = document.querySelector('input[name="payment"]:checked');
+                if (!paymentSelected) {
+                    alert('Por favor, selecione uma forma de pagamento.');
+                    isValid = false;
+                }
+
+                return isValid;
+            }
+
+            function handleOrderSubmission() {
+                if (!validateForm()) {
+                    alert('Por favor, preencha todos os campos obrigatórios.');
+                    return;
+                }
+
+                // Simular processamento
+                finishOrderBtn.disabled = true;
+                finishOrderBtn.querySelector('.btn-text').innerHTML = '<span class="loading"></span>Processando...';
+
+                setTimeout(() => {
+                    // Gerar número do pedido
+                    const orderNumber = Math.floor(Math.random() * 900000) + 100000;
+                    document.getElementById('orderNumber').textContent = `Pedido #${orderNumber}`;
+                    
+                    // Mostrar modal de sucesso
+                    successModal.classList.add('active');
+                    
+                    // Limpar carrinho
+                    localStorage.removeItem('cart');
+                    
+                    // Restaurar botão
+                    finishOrderBtn.disabled = false;
+                    finishOrderBtn.querySelector('.btn-text').textContent = 'Finalizar Pedido';
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>
+
